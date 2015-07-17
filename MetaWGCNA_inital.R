@@ -71,8 +71,8 @@ table(clust)
 
 # clust 1 contains the samples we want to keep.
 
-keepSamples = (clust==1)
-datExpr1 = exp1[keepSamples, ]
+keepSamples1 = (clust==1)
+datExpr1 = exp1[keepSamples1, ]
 nGenes1 = ncol(datExpr1)
 nSamples1 = nrow(datExpr1)
 
@@ -90,11 +90,11 @@ if (!gsg$allOK)
 {
   # Optionally, print the gene and sample names that were removed:
   if (sum(!gsg$goodGenes)>0)
-    printFlush(paste("Removing genes:", paste(names(exp)[!gsg$goodGenes], collapse = ", ")));
+    printFlush(paste("Removing genes:", paste(names(exp2)[!gsg$goodGenes], collapse = ", ")));
   if (sum(!gsg$goodSamples)>0)
-    printFlush(paste("Removing samples:", paste(rownames(exp)[!gsg$goodSamples], collapse = ", ")));
+    printFlush(paste("Removing samples:", paste(rownames(exp2)[!gsg$goodSamples], collapse = ", ")));
   # Remove the offending genes and samples from the data:
-  exp = exp[gsg$goodSamples, gsg$goodGenes]
+  exp2 = exp2[gsg$goodSamples, gsg$goodGenes]
 }
 
 
@@ -128,7 +128,7 @@ table(clust)
 # clust 1 contains the samples we want to keep.
 
 keepSamples = (clust==1)
-datExp2r = exp2[keepSamples, ]
+datExpr2 = exp2[keepSamples, ]
 nGenes2 = ncol(datExpr2)
 nSamples2 = nrow(datExpr2)
 
@@ -137,16 +137,21 @@ nSamples2 = nrow(datExpr2)
 ##### NOW TRANSPOSE  
 ### ### ROWS = genes, COLUMNS = samples
 
-
+datExpr1 <- as.data.frame(t(datExpr1))
+datExpr2 <- as.data.frame(t(datExpr2))
 
 #### only common genes can be included
 
-commongenes <- intersect(rownames(exp1), rownames(exp2))
-datExpr1 <- exp1[commongenes,]
-datExpr2 <- exp2[commongenes,]
+commongenes <- intersect(rownames(datExpr1), rownames(datExpr2))
+datExpr1 <- datExpr1[commongenes,]
+datExpr2 <- datExpr2[commongenes,]
+
+###
+save(datExpr1, datExpr2, file = "MetaAnalysis_trimmed_input.RData")
 
 #### correlating general network properties
 ### assessing the comparability of the two data sets by correlating measures of 
 ## average gene expression and overall connectivity between the data sets
 
 ## determine softpower for the sets
+
