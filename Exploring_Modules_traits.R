@@ -71,7 +71,7 @@ for (c in 1:length(colorsA1)){
 
 #### Note that this code now contains rounding of the cor and p.value
 ### need to change this if that bothers you.
-corr_out <- matrix(nrow = 35, ncol = 2)
+corr_out <- matrix(nrow = 13, ncol = 2)
 
 for (c in 1:ncol(MEsurv)){
   cor <- cor.test(clinsurv$Survival.Time, MEsurv[,c])

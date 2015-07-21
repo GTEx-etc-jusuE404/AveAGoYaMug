@@ -276,7 +276,7 @@ diag(adjacency2)=0
 dissTOM2   = 1-TOMsimilarity(adjacency2, TOMType="signed")
 geneTree2  = flashClust(as.dist(dissTOM2), method="average")
 
-save.image("MetaAn.RData")  
+#save.image("MetaAn.RData")  
 
 
 
@@ -302,6 +302,8 @@ for (ds in 0:3){
 pdf("Module_choices.pdf", height=10,width=25); 
 plotDendroAndColors(geneTree1, mColorh, paste("dpSplt =",0:3), main = "",dendroLabels=FALSE);
 dev.off()
+
+#### This is where I chose deepsplit = 0
 modules1 =  mColorh[,1] # (Chosen based on plot below)
 
 
@@ -318,7 +320,7 @@ pcTree1A = hclust(as.dist(distPC1A),method="a")
 MDS_1A   = cmdscale(as.dist(distPC1A),2)
 colorsA1 = names(table(modules1))
 
-save.image("PC_colours.RData")
+#save.image("PC_colours.RData")
 
 pdf("ModuleEigengeneVisualizations.pdf",height=6,width=6)
 par(mfrow=c(1,1), mar=c(0, 3, 1, 1) + 0.1, cex=1)
@@ -434,6 +436,9 @@ for (c in 1:length(colorsA1)){
 save.image("tutorial.RData") #(optional line of code)
 
 #### beautiful!!! 
+
+### save out some stuff
+save(geneTree1, geneTree2, modules1, ME_1A, ME_2A, file = "Modules_DS0.RData")
 
 ####  NOW determine which genes are hubs in both networks
 topGenesKME = NULL
