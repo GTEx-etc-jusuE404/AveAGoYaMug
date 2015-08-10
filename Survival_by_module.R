@@ -9,6 +9,10 @@ load(file = "MetaAnalysis_trimmed_input.RData")
 load(file = "Modules_DS0.RData")
 colorsA1 = names(table(modules1))
 
+### add in the rownames for the ME_ data frames
+
+rownames(ME_1A) <- colnames(datExpr1)
+rownames(ME_2A) <- colnames(datExpr2)
 #### do binning of surivival by modules
 ### just for now, just do within the basals and use a 1/2 (??1/3)
 
@@ -232,3 +236,51 @@ colnames(aov.out) <- c("log Hazard Ratio", "Hazard Ratio", "SE Hazard Ratio", "Z
 #### none of these are significant - probably the dilution effect of too
 ## many useless genes at the end of the module
 
+
+### Survivial curves
+library(survival)
+
+
+mods <- c("MEblue", "MEgreen", "MEyellow")
+
+mods_s <- output[,mods]
+attach(mods_s)
+
+
+survival_time = clin_bas_tcga$OS_Time_nature2012
+survival_event = clin_bas_tcga$OS_event_nature2012
+level = factor(mods_s$MEblue, levels = c(1,3))
+
+
+fit.diff = survdiff(Surv(survival_time,survival_event == 1) ~ level) 
+
+chisq2 = signif(1-pchisq(fit.diff$chisq,length(levels(level))-1),3) 
+fit1 = survfit(Surv(survival_time,survival_event == 1)~level,
+               conf.type="log-log") 
+kmcolours <- c("black", "red", "green", "blue")
+plot(fit1, conf.int=F,col=kmcolours,xlab="Time to death (days)", 
+     ylab="Survival",main=c("All subtype survival by\n Module Expression"), 
+     lwd=4,mark.time=TRUE)
+legend("bottomleft",legend=levels(factor(mods_s)),
+       fill = kmcolours, cex = 1)
+
+###do another anova for signifigance
+anova(coxph(Surv(OS_Time_nature2012,OS_event_nature2012 == 1)~factor(Brown), data = datClin))
+
+
+### add to the end and do a prism one instead
+
+
+mods <- c("MEblue", "MEgreen", "MEyellow")
+
+mods_m <- output[,mods]
+
+survival_time = clin_bas_meta$Survival.Time
+survival_event = clin_bas_meta$Survival.Event
+
+mods_m$survival_time <- survival_time
+mods_m$survival_event <- survival_event
+
+
+write.table(mods_s, "Modules_survival_TCGA.txt", sep = "\t")
+write.table(mods_m, "Modules_survival_METABRIC.txt", sep = "\t")
