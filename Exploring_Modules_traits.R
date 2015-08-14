@@ -31,10 +31,19 @@ list <- intersect(rownames(clinsurv), rownames(ME_2A))
 MEsurv <- ME_2A[list,]
 
 
-pdf("Module_pam50.pdf",height=8,width=8)
+pdf("Module_histo_type.pdf",height=12,width=16)
 for (c in 1:length(colorsA1)){
   inMod = modules1 == colorsA1[c]
-  boxplot(ME_2A[,c] ~ Pam50,
+  boxplot(ME_2A[,c] ~ type,
+          main=colorsA1[c],
+          xlab="Pam 50",ylab="ME in METABRIC")
+}; dev.off()
+
+#########
+pdf("Module_Pam50.pdf",height=8,width=12)
+for (c in 1:length(colorsA1)){
+  inMod = modules1 == colorsA1[c]
+  boxplot(ME_2A[,c] ~ pam50,
           main=colorsA1[c],
           xlab="Pam 50",ylab="ME in METABRIC")
 }; dev.off()
@@ -49,7 +58,7 @@ for (c in 1:length(colorsA1)){
 }; dev.off()
 
 
-pdf("Module_MetSite.pdf",height=8,width=8)
+pdf("Module_MetSite.pdf",height=10,width=12)
 for (c in 1:length(colorsA1)){
   inMod = modules1 == colorsA1[c]
   boxplot(ME_2A[,c] ~ site,
