@@ -1,5 +1,28 @@
 
+
+
+
+setwd("~/Bioinformatics Work/Meth & RNA/Meta-analysis WGCNA")
+
+library(WGCNA)
+library(plyr)
+library(flashClust)
+library(ggplot2)
+library(gplots)
+library(lattice)
+library(extrafont)
+loadfonts()
 ##############
+
+
+load(file = "MetaAnalysis_trimmed_input.RData")
+load(file = "Modules_DS0.RData")
+colorsA1 = names(table(modules1))
+
+### add in the rownames for the ME_ data frames
+
+rownames(ME_1A) <- colnames(datExpr1)
+rownames(ME_2A) <- colnames(datExpr2)
 
 #### Mean centre the expression of the top100 from blue/green/yellow 
 # for basals, in the METABRIC set
@@ -87,3 +110,15 @@ write.table(meta_ave, "Mean_centred_modules_with clin.txt", sep = "\t")
 summary(meta_ave$Green_signature)
 summary(meta_ave$Blue_signature)
 summary(meta_ave$Yellow_signature)
+
+bloc <- read.table("Mean_centred_modules_with clin.txt", sep = "\t", header = TRUE, row.names = 1)
+
+list <- intersect(rownames(bloc), rownames(clin_bas))
+
+bloc <- bloc[list,]
+clin_bas <- clin_bas[list,]
+
+bloc$Treatment <- clin_bas$Treatment
+
+
+write.table(bloc, "Mean_centre_clinical_treatment.txt", sep = "\t")

@@ -27,6 +27,7 @@ clin1 <- read.table("Clinical_final_TCGA.txt", sep = "\t",
 list <- intersect(colnames(datExpr1), rownames(clin1))
 
 clin1 <- clin1[list,]
+datExpr1 <- datExpr1[list,]
 #### Now that you have trimmed the list, set the factors you would like
 Pam50_1 <- as.factor(clin1$PAM50Call_RNAseq)
 

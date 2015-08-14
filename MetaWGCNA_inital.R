@@ -427,13 +427,22 @@ for (c in 1:length(colorsA1)){
                      xlab="kME in A2",ylab="kME in A1")
 }; dev.off()
 
-pdf("inModule_kMEtable2_vs_kMEtable1.pdf",height=8,width=8)
+
+###############  with some changes for colour etc etc
+
+
+pdf("Test_module_test.pdf",height=8,width=8)
+par(mar = c(5,5,5,5))
 for (c in 1:length(colorsA1)){
   inMod = modules1== colorsA1[c]
-  verboseScatterplot(geneModuleMembership2[inMod,c],geneModuleMembership1[inMod,c],main=colorsA1[c],
-                     xlab="kME in A2",ylab="kME in A1")
+  verboseScatterplot(geneModuleMembership2[inMod,c],geneModuleMembership1[inMod,c],
+                     main=colorsA1[c],
+                     xlab="Intraconnectivity in METABRIC",
+                     ylab="Intraconnectivity in TCGA", col = colorsA1[c],
+                     pch = 19)
+  
 }; dev.off()
-save.image("tutorial.RData") #(optional line of code)
+
 
 #### beautiful!!! 
 
