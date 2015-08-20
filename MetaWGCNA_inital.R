@@ -450,6 +450,15 @@ for (c in 1:length(colorsA1)){
 save(geneTree1, geneTree2, modules1, ME_1A, ME_2A, file = "Modules_DS0.RData")
 
 ####  NOW determine which genes are hubs in both networks
+
+### rank the module memberships so that LOWEST RANK = HIGHEST MM
+### => numbered 1 - 12588
+### cbind the two ranked lists side by side
+### then find the max value between the two 
+## and rank the genes by the max value
+## then sort the genes into their modules
+## and you'll have a list of the highest MM genes (picked from both datasets)
+
 topGenesKME = NULL
 for (c in 1:length(colorsA1)){
   kMErank1    = rank(-geneModuleMembership1[,c])
@@ -462,6 +471,4 @@ topGenesKME
 write.table(topGenesKME, "Top100_all_modules_both_networks.txt", sep = "\t")
 
 ### This is the top 100 most interconnected genes by module (in both networks)
-
-
 
